@@ -1,5 +1,8 @@
 
 import { useState } from "react";
+
+import { criptografia } from "../../../services/criptografia";
+
 import "./styles.scss";
 
 type ValoresRetorno = {
@@ -14,6 +17,7 @@ function Login() {
     const [confirmacaoPassword, setConfirmacaoPassword] = useState<string>("");
 
     function verificaPassword() {
+        let senhaCorreta = false;
         if (password.length >= 8) {
             const alfabeto: String[] = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", "Q", "R", "S", "T", "U", "V", "W", "X", "Y", "Z"];
             const numeral: String[] = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"];
@@ -22,6 +26,7 @@ function Login() {
                 numero: 0,
                 simbolo: 0
             };
+
 
             console.log(password);
 
@@ -52,11 +57,18 @@ function Login() {
 
             }
 
-            console.log(valoresRetorno)
+            Object.values(valoresRetorno).forEach((key: any) => {
+                if (key >= 1) senhaCorreta = true;
+            })
+
+            return senhaCorreta;
 
         }
+        else {
+            console.log("Password Menor que 8 digitos")
+            return senhaCorreta;
+        }
     }
-
 
     function verificaValorVazio(valorParaSalvar: string, funcaoSalvar: Function, valorOriginal: string) {
         const valorInterno = valorParaSalvar[valorParaSalvar.length - 1];
@@ -66,6 +78,34 @@ function Login() {
         else {
             funcaoSalvar(valorOriginal)
         }
+    }
+
+    function verificaCampos() {
+        if (usuario === "") {
+            console.log("Usuario Vazio");
+            return
+        }
+        else if (password === "") {
+            console.log("Password Vazio");
+            return
+        }
+        else if (confirmacaoPassword === "") {
+            console.log("Confirmação de Password Vazio");
+            return
+        }
+
+        if (verificaPassword() === false) {
+            console.log("Password Incorreto");
+            return
+        }
+
+        if (password !== confirmacaoPassword) {
+            console.log("Confirmação de Password diferente do Password");
+            return
+        }
+
+        console.log(criptografia(`${usuario}${password}`));
+
     }
     return (
         <>
@@ -93,7 +133,7 @@ function Login() {
                     </div>
                 </div>
                 <div className="containerButtonLogin">
-                    <button onClick={() => verificaPassword()}>
+                    <button onClick={() => verificaCampos()}>
                         Registrar
                     </button>
                 </div>
