@@ -1,7 +1,9 @@
 
 import { useState } from "react";
 
-import { criptografia } from "../../../services/criptografia";
+import { } from "crypto-js"
+import { criptografia, verificacaoToken } from "../../../services/criptografia";
+import { LocalStorage } from "../../../types";
 
 import "./styles.scss";
 
@@ -11,10 +13,23 @@ type ValoresRetorno = {
     simbolo: number
 }
 
+type ValoresCssIput = {
+    usuario?: string,
+    password?: string,
+    confirmacao?: string
+}
+
 function Login() {
     const [usuario, setUsuario] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmacaoPassword, setConfirmacaoPassword] = useState<string>("");
+    const [efeitoFaltaInformacao, setEfeitoFaltaInformacao] = useState<ValoresCssIput>({
+        usuario: "",
+        password: "",
+        confirmacao: ""
+    });
+
+    const localStorageGeral: LocalStorage = JSON.parse(localStorage.getItem("listLeads") as string);
 
     function verificaPassword() {
         let senhaCorreta = false;
@@ -26,9 +41,6 @@ function Login() {
                 numero: 0,
                 simbolo: 0
             };
-
-
-            console.log(password);
 
             for (let i = 0; i < password.length; i++) {
                 //Irá mudar caso tenha um valor do Alfabeto ou Numero
@@ -80,16 +92,29 @@ function Login() {
         }
     }
 
+    function resetarEfeitoFaltaInformacao() {
+        const objetoRetorno = Object.keys(efeitoFaltaInformacao).map(key => {
+            return key = "";
+        })
+
+        setEfeitoFaltaInformacao(objetoRetorno as ValoresCssIput);
+    }
+
     function verificaCampos() {
+        resetarEfeitoFaltaInformacao();
+
         if (usuario === "") {
+            setEfeitoFaltaInformacao({ usuario: "destaqueSpan" })
             console.log("Usuario Vazio");
             return
         }
         else if (password === "") {
+            setEfeitoFaltaInformacao({ password: "destaqueSpan" })
             console.log("Password Vazio");
             return
         }
         else if (confirmacaoPassword === "") {
+            setEfeitoFaltaInformacao({ confirmacao: "destaqueSpan" })
             console.log("Confirmação de Password Vazio");
             return
         }
@@ -104,7 +129,20 @@ function Login() {
             return
         }
 
-        console.log(criptografia(`${usuario}${password}`));
+        const valorCripografia: string = criptografia(`${usuario}&${password}`);
+
+        if (localStorageGeral === null) {
+            localStorage.setItem("listLeads", JSON.stringify({
+                login: {
+                    user: usuario,
+                    password: password,
+                    token: valorCripografia
+                }
+            } as LocalStorage))
+        }
+        else if (verificacaoToken(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
+            console.log("Login Efetuado")
+        }
 
     }
     return (
@@ -119,22 +157,22 @@ function Login() {
                     </span>
                 </div>
                 <div className="containerCamposPreenchimentoLogin">
-                    <div className="containerInput">
+                    <div className={`${efeitoFaltaInformacao.usuario} containerInput`}>
                         <span>Usuário*</span>
                         <input type="text" value={usuario} onChange={event => { verificaValorVazio(event.target.value, setUsuario, usuario) }}></input>
                     </div>
-                    <div className="containerInput">
+                    <div className={`${efeitoFaltaInformacao.password} containerInput`}>
                         <span>Password*</span>
                         <input type="password" value={password} onChange={event => { verificaValorVazio(event.target.value, setPassword, password) }}></input>
                     </div>
-                    <div className="containerInput">
+                    <div className={`${efeitoFaltaInformacao.confirmacao} containerInput`}>
                         <span>Confirmação Password*</span>
                         <input type="password" value={confirmacaoPassword} onChange={event => { verificaValorVazio(event.target.value, setConfirmacaoPassword, confirmacaoPassword) }}></input>
                     </div>
                 </div>
                 <div className="containerButtonLogin">
                     <button onClick={() => verificaCampos()}>
-                        Registrar
+                        Registrar / Entrar
                     </button>
                 </div>
             </div>
