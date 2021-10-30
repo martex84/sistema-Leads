@@ -138,7 +138,9 @@ function Login() {
                     password: password,
                     token: valorCripografia
                 }
-            } as LocalStorage))
+            } as LocalStorage));
+
+            console.log("Login Efetuado")
         }
         else if (verificacaoToken(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
             console.log("Login Efetuado")
