@@ -1,3 +1,5 @@
+import { CSSProperties } from "react"
+
 type LocalStorage = {
     login: {
         user: string,
@@ -6,4 +8,13 @@ type LocalStorage = {
     } | null
 }
 
-export type { LocalStorage }
+type ValoresMessagem = {
+    displayContainer: CSSProperties,
+    mensagem: string,
+    setDisplay?: () => void | null
+}
+
+export type {
+    LocalStorage,
+    ValoresMessagem
+}
