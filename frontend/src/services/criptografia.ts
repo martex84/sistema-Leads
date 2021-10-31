@@ -3,7 +3,7 @@ import { AES, enc } from "crypto-js"
 function criptografia(valor: string) {
     let valorRetorno: any = "";
 
-    valorRetorno = AES.encrypt(valor, 'key').toString();
+    valorRetorno = AES.encrypt(valor, '5d17469f766d3056e50092e62250a0d0a460c167').toString();
 
     return valorRetorno;
 }
@@ -11,7 +11,7 @@ function criptografia(valor: string) {
 function descripografia(valor: string) {
     let valorRetorno: string = "";
 
-    valorRetorno = AES.decrypt(valor, 'key').toString(enc.Utf8);
+    valorRetorno = AES.decrypt(valor, '5d17469f766d3056e50092e62250a0d0a460c167').toString(enc.Utf8);
 
     return valorRetorno;
 }
