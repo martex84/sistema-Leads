@@ -1,11 +1,9 @@
-
-import { useState } from "react";
-
-import { } from "crypto-js"
+import { useEffect, useState } from "react";
 import { criptografia, verificacaoToken } from "../../../services/criptografia";
-import { LocalStorage } from "../../../types";
+import { LocalStorage, ValoresMessagem } from "../../../types";
 
 import "./styles.scss";
+import { Mensagem } from "../mensagem";
 
 type ValoresRetorno = {
     alfabeto: number,
@@ -28,6 +26,10 @@ function Login() {
         password: "",
         confirmacao: ""
     });
+    const [efeitoMensagem, setEfeitoMensagem] = useState<ValoresMessagem>({
+        displayContainer: { display: "none" },
+        mensagem: ""
+    })
 
     const localStorageGeral: LocalStorage = JSON.parse(localStorage.getItem("listLeads") as string);
 
@@ -101,52 +103,108 @@ function Login() {
     }
 
     function verificaCampos() {
+        let mensagemInterna = "";
+        let erroInterno = false;
+
         resetarEfeitoFaltaInformacao();
 
         if (usuario === "") {
             setEfeitoFaltaInformacao({ usuario: "destaqueSpan" })
-            console.log("Usuario Vazio");
-            return
+            mensagemInterna = "Usuario Vazio!";
+            erroInterno = true;
         }
         else if (password === "") {
             setEfeitoFaltaInformacao({ password: "destaqueSpan" })
-            console.log("Password Vazio");
-            return
+            mensagemInterna = "Password Vazio!";
+            erroInterno = true;
         }
         else if (confirmacaoPassword === "") {
             setEfeitoFaltaInformacao({ confirmacao: "destaqueSpan" })
-            console.log("Confirmação de Password Vazio");
-            return
+            mensagemInterna = "Confirmação de Password Vazio!";
+            erroInterno = true;
         }
 
-        if (verificaPassword() === false) {
-            console.log("Password Incorreto");
-            return
+        if (verificaPassword() === false && erroInterno === false) {
+            mensagemInterna = "Password Incorreto, utilize caracteres, números e simbolos!";
+            erroInterno = true;
         }
 
-        if (password !== confirmacaoPassword) {
-            console.log("Confirmação de Password diferente do Password");
-            return
+        if (password !== confirmacaoPassword && erroInterno === false) {
+            mensagemInterna = "Confirmação de Password diferente do Password";
+            erroInterno = true;
         }
 
-        const valorCripografia: string = criptografia(`${usuario}&${password}`);
-
-        if (localStorageGeral === null) {
-            localStorage.setItem("listLeads", JSON.stringify({
-                login: {
-                    user: usuario,
-                    password: password,
-                    token: valorCripografia
-                }
-            } as LocalStorage));
-
-            console.log("Login Efetuado")
+        if (erroInterno === false) {
+            verificaToken();
         }
-        else if (verificacaoToken(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
-            console.log("Login Efetuado")
+        else {
+            setEfeitoMensagem({
+                displayContainer: { display: "flex" },
+                mensagem: mensagemInterna
+            })
+        }
+    }
+
+    function zerarDisplayMensagem() {
+        setEfeitoMensagem({
+            displayContainer: { display: "none" },
+            mensagem: ""
+        })
+    }
+
+    function verificaToken() {
+        let mensagemInterna = "";
+        let liberarMensagem = false;
+
+        if (usuario !== "" && password !== "" && confirmacaoPassword !== "") {
+            const valorCripografia: string = criptografia(`${usuario}&${password}`);
+
+            if (localStorageGeral === null) {
+                localStorage.setItem("listLeads", JSON.stringify({
+                    login: {
+                        user: usuario,
+                        password: password,
+                        token: valorCripografia
+                    }
+                } as LocalStorage));
+
+                mensagemInterna = "Login Efetuado com sucesso!";
+                liberarMensagem = true;
+            }
+            else if (verificacaoToken(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
+                mensagemInterna = "Login Efetuado com sucesso!";
+                liberarMensagem = true;
+            }
+        }
+
+        if (liberarMensagem === true) {
+            setEfeitoMensagem({
+                displayContainer: { display: "flex" },
+                mensagem: mensagemInterna
+            })
         }
 
     }
+
+    useEffect(() => {
+        if (usuario !== null && password !== null && confirmacaoPassword !== null) {
+            const localStorageGeralUseEffect: LocalStorage = JSON.parse(localStorage.getItem("listLeads") as string);
+            if (localStorageGeralUseEffect !== null) {
+                if (localStorageGeralUseEffect.login?.token !== null) {
+                    if (verificacaoToken(`${localStorageGeralUseEffect.login?.user}&${localStorageGeralUseEffect.login?.password}`, localStorageGeralUseEffect.login?.token as string)) {
+                        let mensagemInterna = "";
+                        mensagemInterna = "Bem vindo de volta!";
+
+                        setEfeitoMensagem({
+                            displayContainer: { display: "flex" },
+                            mensagem: mensagemInterna
+                        })
+                    }
+                }
+            }
+        }
+    }, [password, usuario, confirmacaoPassword])
+
     return (
         <>
             <div className="containerLogin">
@@ -178,6 +236,7 @@ function Login() {
                     </button>
                 </div>
             </div>
+            <Mensagem mensagem={efeitoMensagem.mensagem} displayContainer={efeitoMensagem.displayContainer} setDisplay={zerarDisplayMensagem} />
         </>
     );
 }
