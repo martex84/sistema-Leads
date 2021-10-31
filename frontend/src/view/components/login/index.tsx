@@ -2,8 +2,10 @@ import { useEffect, useState } from "react";
 import { criptografia, verificacaoToken } from "../../../services/criptografia";
 import { LocalStorage, ValoresMessagem } from "../../../types";
 
-import "./styles.scss";
 import { Mensagem } from "../mensagem";
+import { Logo } from "../logo"
+
+import "./styles.scss";
 
 type ValoresRetorno = {
     alfabeto: number,
@@ -208,14 +210,7 @@ function Login() {
     return (
         <>
             <div className="containerLogin">
-                <div className="containerTituloLogin">
-                    <span>
-                        Elo
-                    </span>
-                    <span>
-                        Group
-                    </span>
-                </div>
+                <Logo />
                 <div className="containerCamposPreenchimentoLogin">
                     <div className={`${efeitoFaltaInformacao.usuario} containerInput`}>
                         <span>Usuário*</span>
