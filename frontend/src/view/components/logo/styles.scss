@@ -1,0 +1,23 @@
+.containerTituloLogin {
+    padding: 20px;
+
+    margin: 20px;
+
+    background-color: #14222b;
+
+    border-radius: 10px;
+
+    >span {
+        font-size: 3em;
+        letter-spacing: 10px;
+
+        text-transform: uppercase;
+
+        color: #fff;
+
+        &:nth-child(2) {
+            font-weight: bolder;
+        }
+    }
+
+}
