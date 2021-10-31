@@ -1,8 +1,47 @@
+import { useState } from "react";
 import { Logo } from "../../components/logo";
+
+import { RowLead } from "../../components/rowLead";
+import { ArrayRowLead } from "../../../types";
 
 import "./styles.scss";
 
+
+
 function Leads() {
+
+    const [arrayRowLead, setArrayRowLead] = useState<ArrayRowLead[]>([
+        {
+            primeiroCampo: "Informação 1",
+            segundoCampo: "",
+            terceiroCampos: ""
+        }
+    ])
+
+    function setMove(key: string, valores: ArrayRowLead) {
+        if (key === "1") {
+
+        }
+        switch (key) {
+            case "1":
+                setArrayRowLead([{
+                    primeiroCampo: "",
+                    segundoCampo: arrayRowLead[0].primeiroCampo,
+                    terceiroCampos: ""
+                }])
+                break;
+
+            case "2":
+                setArrayRowLead([{
+                    primeiroCampo: "",
+                    segundoCampo: arrayRowLead[0].primeiroCampo,
+                    terceiroCampos: ""
+                }])
+                break;
+
+        }
+    }
+
     return (
         <>
             <div className="containerLeads">
@@ -31,6 +70,14 @@ function Leads() {
                                     Reunião Agendada
                                 </div>
                             </li>
+                            {arrayRowLead.map((objeto, index) => {
+                                return (
+                                    <RowLead setMove={setMove} informacao={{
+                                        objeto: objeto,
+                                        key: index
+                                    }} />
+                                );
+                            })}
                         </ul>
                     </div>
                 </div>

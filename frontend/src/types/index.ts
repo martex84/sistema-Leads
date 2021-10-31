@@ -14,7 +14,14 @@ type ValoresMessagem = {
     setDisplay?: () => void | null
 }
 
+type ArrayRowLead = {
+    primeiroCampo: string,
+    segundoCampo: string,
+    terceiroCampos: string
+}
+
 export type {
     LocalStorage,
-    ValoresMessagem
+    ValoresMessagem,
+    ArrayRowLead
 }

@@ -87,8 +87,7 @@
                 border: 2px solid #000;
                 border-bottom: 0px;
 
-
-                .sumarioListaConteudoLeads {
+                >li {
                     display: flex;
                     flex-wrap: nowrap;
                     align-items: center;
@@ -109,6 +108,9 @@
                             border-left: 0px;
                         }
                     }
+                }
+
+                .sumarioListaConteudoLeads {
 
                     .containerDescricaoConteudoLeads {
                         background-color: #9e9e9e;

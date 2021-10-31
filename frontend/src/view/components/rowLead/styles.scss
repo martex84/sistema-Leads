@@ -1,0 +1,14 @@
+.containerDadosRowLead {
+    >div {
+        cursor: pointer;
+
+        user-select: all;
+
+    }
+}
+
+.selecaoDadosRowLead {
+    user-select: all;
+
+    color: red;
+}
