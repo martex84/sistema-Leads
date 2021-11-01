@@ -113,28 +113,46 @@ function Login() {
 
         if (usuario === "") {
             setEfeitoFaltaInformacao({ usuario: "destaqueSpan" })
+
             mensagemInterna = "Usuario Vazio!";
+
             erroInterno = true;
+
+            setEfeturarLogin(false);
         }
         else if (password === "") {
             setEfeitoFaltaInformacao({ password: "destaqueSpan" })
+
             mensagemInterna = "Password Vazio!";
+
             erroInterno = true;
+
+            setEfeturarLogin(false);
         }
         else if (confirmacaoPassword === "") {
             setEfeitoFaltaInformacao({ confirmacao: "destaqueSpan" })
+
             mensagemInterna = "Confirmação de Password Vazio!";
+
             erroInterno = true;
+
+            setEfeturarLogin(false);
         }
 
         if (verificaPassword() === false && erroInterno === false) {
             mensagemInterna = "Password Incorreto, utilize caracteres, números e simbolos!";
+
             erroInterno = true;
+
+            setEfeturarLogin(false);
         }
 
         if (password !== confirmacaoPassword && erroInterno === false) {
             mensagemInterna = "Confirmação de Password diferente do Password";
+
             erroInterno = true;
+
+            setEfeturarLogin(false);
         }
 
         if (erroInterno === false) {
