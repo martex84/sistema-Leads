@@ -13,9 +13,13 @@ type ConfiguracaoRowLead = {
     }
 }
 
-function RowLead(props: ConfiguracaoRowLead) {
+type ConfiguracaoEfeitoDrag = {
+    primeiroCampo?: string,
+    segundoCampo?: string,
+    terceiroCapo?: string
+}
 
-    console.log(props)
+function RowLead(props: ConfiguracaoRowLead) {
 
     const [valorRow, setValorRow] = useState<ArrayRowLead>({
         primeiroCampo: props.informacao.objeto.primeiroCampo,
@@ -25,55 +29,113 @@ function RowLead(props: ConfiguracaoRowLead) {
 
     const [tipoAtual, setTipoAtual] = useState<string>("");
 
-    const [tipoFuturo, setTipoFuturo] = useState<string>("");
+    const [objetoEfeitoDrag, setObjetoEfeitoDrag] = useState<ConfiguracaoEfeitoDrag>({
+        primeiroCampo: "",
+        segundoCampo: "",
+        terceiroCapo: ""
+    });
 
-    function salvarValorAtualFuturo(valor: string) {
-        if (tipoAtual === "") {
-            setTipoAtual(valor)
+    function salvarValorAtualFuturo(valor: string, event: any) {
+
+        const tamanhoComponenteAtual = (event.target.innerText as string).length;
+
+        let arrayValores: ArrayRowLead;
+
+        let objetoInternoEfeitoDrag = objetoEfeitoDrag;
+
+        switch (valor) {
+            case "1":
+                if (tipoAtual === "" && event.type === "dragstart" && tamanhoComponenteAtual !== 0) {
+                    setTipoAtual("1");
+
+                    objetoInternoEfeitoDrag.primeiroCampo = "selecaoDadosRowLead";
+                    objetoInternoEfeitoDrag.segundoCampo = "destinoDadosRowLead";
+
+                    setObjetoEfeitoDrag(objetoInternoEfeitoDrag);
+
+                    return;
+                }
+                break
+
+            case "2":
+                if (tipoAtual === "1" && event.type === "mouseenter") {
+                    arrayValores = {
+                        primeiroCampo: "",
+                        segundoCampo: valorRow.primeiroCampo,
+                        terceiroCampos: ""
+                    }
+                    /* props.setMove("1", arrayValores); */
+
+                    setValorRow(arrayValores);
+
+                    setTipoAtual("");
+
+                    objetoInternoEfeitoDrag.primeiroCampo = "";
+                    objetoInternoEfeitoDrag.segundoCampo = "";
+
+                    setObjetoEfeitoDrag(objetoInternoEfeitoDrag);
+
+                    return
+                }
+                else if (tipoAtual === "" && event.type === "dragstart" && tamanhoComponenteAtual !== 0) {
+                    setTipoAtual("2");
+
+                    objetoInternoEfeitoDrag.segundoCampo = "selecaoDadosRowLead";
+                    objetoInternoEfeitoDrag.terceiroCapo = "destinoDadosRowLead";
+
+                    setObjetoEfeitoDrag(objetoInternoEfeitoDrag);
+
+                    return;
+                }
+                break;
+
+            case "3":
+                if (tipoAtual === "2" && event.type === "mouseenter") {
+                    arrayValores = {
+                        primeiroCampo: "",
+                        segundoCampo: "",
+                        terceiroCampos: valorRow.segundoCampo
+                    }
+                    /* props.setMove("1", arrayValores); */
+
+                    setValorRow(arrayValores);
+
+                    setTipoAtual("");
+
+                    objetoInternoEfeitoDrag.segundoCampo = "";
+                    objetoInternoEfeitoDrag.terceiroCapo = "";
+
+                    setObjetoEfeitoDrag(objetoInternoEfeitoDrag);
+
+                    return;
+                }
+                break;
         }
-        else {
-            setTipoFuturo(valor);
-        }
+
+        setTipoAtual("");
+
     }
-
-    useEffect(() => {
-        if (tipoAtual !== "" && tipoFuturo !== "") {
-            let arrayValores: ArrayRowLead;
-            if (tipoAtual === "1" && tipoFuturo === "2") {
-                arrayValores = {
-                    primeiroCampo: "",
-                    segundoCampo: valorRow.primeiroCampo,
-                    terceiroCampos: ""
-                }
-                props.setMove("1", arrayValores);
-                setValorRow(arrayValores);
-            }
-            if (tipoAtual === "2" && tipoFuturo === "3") {
-                arrayValores = {
-                    primeiroCampo: "",
-                    segundoCampo: "",
-                    terceiroCampos: valorRow.segundoCampo
-                }
-                props.setMove("2", arrayValores);
-                setValorRow(arrayValores);
-            }
-
-            setTipoAtual("");
-
-            setTipoFuturo("");
-        }
-    }, [tipoAtual, tipoFuturo, props, valorRow])
 
     return (
         <>
             <li className="containerDadosRowLead">
-                <div onDragLeave={() => salvarValorAtualFuturo("1")} draggable="true">
+                <div
+                    className={objetoEfeitoDrag.primeiroCampo}
+                    onDragStart={(event) => salvarValorAtualFuturo("1", event)}
+                    draggable="true">
                     {valorRow.primeiroCampo}
                 </div>
-                <div onDragLeave={() => salvarValorAtualFuturo("2")} draggable="true">
+                <div
+                    className={objetoEfeitoDrag.segundoCampo}
+                    onDragStart={(event) => salvarValorAtualFuturo("2", event)}
+                    onMouseEnter={(event) => salvarValorAtualFuturo("2", event)}
+                    draggable="true">
                     {valorRow.segundoCampo}
                 </div>
-                <div onDragLeave={() => salvarValorAtualFuturo("3")} draggable="true">
+                <div
+                    className={objetoEfeitoDrag.terceiroCapo}
+                    onMouseEnter={(event) => salvarValorAtualFuturo("3", event)}
+                    draggable="true">
                     {valorRow.terceiroCampos}
                 </div>
             </li>

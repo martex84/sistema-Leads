@@ -15,6 +15,11 @@ function Leads() {
             primeiroCampo: "Informação 1",
             segundoCampo: "",
             terceiroCampos: ""
+        },
+        {
+            primeiroCampo: "Informação 2",
+            segundoCampo: "",
+            terceiroCampos: ""
         }
     ])
 
@@ -72,10 +77,13 @@ function Leads() {
                             </li>
                             {arrayRowLead.map((objeto, index) => {
                                 return (
-                                    <RowLead setMove={setMove} informacao={{
-                                        objeto: objeto,
-                                        key: index
-                                    }} />
+                                    <RowLead setMove={setMove}
+                                        informacao={{
+                                            objeto: objeto,
+                                            key: index
+                                        }}
+                                        key={index}
+                                    />
                                 );
                             })}
                         </ul>
