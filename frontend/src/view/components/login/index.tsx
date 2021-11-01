@@ -23,6 +23,7 @@ function Login() {
     const [usuario, setUsuario] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [confirmacaoPassword, setConfirmacaoPassword] = useState<string>("");
+    const [efeturarLogin, setEfeturarLogin] = useState<boolean>(false);
     const [efeitoFaltaInformacao, setEfeitoFaltaInformacao] = useState<ValoresCssIput>({
         usuario: "",
         password: "",
@@ -33,7 +34,7 @@ function Login() {
         mensagem: ""
     })
 
-    const localStorageGeral: LocalStorage = JSON.parse(localStorage.getItem("listLeads") as string);
+    const localStorageGeral: LocalStorage = JSON.parse(localStorage.getItem("listLeads-login") as string);
 
     function verificaPassword() {
         let senhaCorreta = false;
@@ -147,7 +148,11 @@ function Login() {
         }
     }
 
-    function zerarDisplayMensagem() {
+    function acaoBotaoMensagem() {
+        if (efeturarLogin === true) {
+            window.location.href = "http://localhost:3000/leads"
+        }
+
         setEfeitoMensagem({
             displayContainer: { display: "none" },
             mensagem: ""
@@ -162,7 +167,7 @@ function Login() {
             const valorCripografia: string = criptografia(`${usuario}&${password}`);
 
             if (localStorageGeral === null) {
-                localStorage.setItem("listLeads", JSON.stringify({
+                localStorage.setItem("listLeads-login", JSON.stringify({
                     login: {
                         user: usuario,
                         password: password,
@@ -171,11 +176,17 @@ function Login() {
                 } as LocalStorage));
 
                 mensagemInterna = "Login Efetuado com sucesso!";
+
+                setEfeturarLogin(true);
+
                 liberarMensagem = true;
             }
             else if (verificacaoToken(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
                 mensagemInterna = "Login Efetuado com sucesso!";
+
                 liberarMensagem = true;
+
+                setEfeturarLogin(true);
             }
         }
 
@@ -190,7 +201,7 @@ function Login() {
 
     useEffect(() => {
         if (usuario !== null && password !== null && confirmacaoPassword !== null) {
-            const localStorageGeralUseEffect: LocalStorage = JSON.parse(localStorage.getItem("listLeads") as string);
+            const localStorageGeralUseEffect: LocalStorage = JSON.parse(localStorage.getItem("listLeads-login") as string);
             if (localStorageGeralUseEffect !== null) {
                 if (localStorageGeralUseEffect.login?.token !== null) {
                     if (verificacaoToken(`${localStorageGeralUseEffect.login?.user}&${localStorageGeralUseEffect.login?.password}`, localStorageGeralUseEffect.login?.token as string)) {
@@ -201,6 +212,8 @@ function Login() {
                             displayContainer: { display: "flex" },
                             mensagem: mensagemInterna
                         })
+
+                        setEfeturarLogin(true);
                     }
                 }
             }
@@ -231,7 +244,7 @@ function Login() {
                     </button>
                 </div>
             </div>
-            <Mensagem mensagem={efeitoMensagem.mensagem} displayContainer={efeitoMensagem.displayContainer} setDisplay={zerarDisplayMensagem} />
+            <Mensagem mensagem={efeitoMensagem.mensagem} displayContainer={efeitoMensagem.displayContainer} setDisplay={acaoBotaoMensagem} />
         </>
     );
 }
