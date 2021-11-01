@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Logo } from "../../components/logo";
 
 import { RowLead } from "../../components/rowLead";
@@ -6,46 +6,43 @@ import { ArrayRowLead } from "../../../types";
 
 import "./styles.scss";
 
+const nomeLocalStorage = "listLeads-leads";
 
+if (localStorage.getItem(nomeLocalStorage) === null) {
+    localStorage.setItem(nomeLocalStorage, "");
+}
 
 function Leads() {
 
-    const [arrayRowLead, setArrayRowLead] = useState<ArrayRowLead[]>([
-        {
-            primeiroCampo: "Informação 1",
-            segundoCampo: "",
-            terceiroCampos: ""
-        },
-        {
-            primeiroCampo: "Informação 2",
-            segundoCampo: "",
-            terceiroCampos: ""
-        }
-    ])
+    const [arrayRowLead, setArrayRowLead] = useState<ArrayRowLead[]>([])
 
-    function setMove(key: string, valores: ArrayRowLead) {
-        if (key === "1") {
+    function setMove(key: number, valores: ArrayRowLead) {
+        const arrayRetorno = arrayRowLead.map((componente, index) => {
+            if (index === key) {
+                componente.primeiroCampo = valores.primeiroCampo;
+                componente.segundoCampo = valores.segundoCampo;
+                componente.terceiroCampos = valores.terceiroCampos;
+            }
 
-        }
-        switch (key) {
-            case "1":
-                setArrayRowLead([{
-                    primeiroCampo: "",
-                    segundoCampo: arrayRowLead[0].primeiroCampo,
-                    terceiroCampos: ""
-                }])
-                break;
+            return componente;
+        })
 
-            case "2":
-                setArrayRowLead([{
-                    primeiroCampo: "",
-                    segundoCampo: arrayRowLead[0].primeiroCampo,
-                    terceiroCampos: ""
-                }])
-                break;
+        setArrayRowLead(arrayRetorno)
 
-        }
+        localStorage.setItem(nomeLocalStorage, JSON.stringify(arrayRetorno));
     }
+
+    useEffect(() => {
+        if (arrayRowLead.length === 0) {
+            if (localStorage.getItem(nomeLocalStorage) !== null) {
+                setArrayRowLead(JSON.parse(localStorage.getItem(nomeLocalStorage) as string));
+            }
+        }
+    }, [arrayRowLead])
+
+    useCallback(() => {
+        setArrayRowLead(JSON.parse(localStorage.getItem(nomeLocalStorage) as string));
+    }, [localStorage.getItem(nomeLocalStorage)])
 
     return (
         <>
