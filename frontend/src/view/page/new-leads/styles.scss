@@ -1,0 +1,178 @@
+@mixin flexCentralizado {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.containerNewLeads {
+    width: 100%;
+    height: 100vh;
+
+    @include flexCentralizado();
+    flex-direction: column;
+
+    position: relative;
+
+    >div {
+        width: 800px;
+        height: 600px;
+        padding: 20px 40px;
+
+        display: flex;
+        align-items: flex-start;
+        flex-direction: column;
+
+        border: 3px solid #a9a9a9;
+
+        background-color: #fff;
+    }
+
+    .containerHeaderNewLeads {
+        width: 100%;
+
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        align-self: flex-start;
+
+        & div:first-child {
+            margin: 0;
+        }
+
+        .detalhePainelNewLeads {
+            width: 350px;
+
+            text-align: center;
+            font-size: 1.4em;
+        }
+    }
+
+    .containerConteudoNewLeads {
+        width: 100%;
+
+        margin-top: 40px;
+
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: row;
+        flex-wrap: nowrap;
+
+        >div {
+            width: 350px;
+            height: 100%;
+        }
+
+        .containerInputNewLeads {
+            >div {
+                display: flex;
+                align-items: flex-start;
+                justify-content: flex-start;
+                flex-direction: column;
+
+                margin-top: 15px;
+
+                >span {
+                    margin-left: 5px;
+                }
+
+                >input {
+                    width: 250px;
+                    height: 30px;
+
+                    margin-top: 5px;
+
+                    border: 2px solid #a9a9a9;
+                }
+
+                &:first-child {
+                    margin-top: 0;
+                }
+            }
+
+        }
+
+        .containerAcoesNewLeads {
+            .tabelaOportunidadeNewLeads {
+                .listaOportunidadesNewLeads {
+                    width: 100%;
+
+                    list-style: none;
+
+                    border: 2px solid #555555;
+
+                    >li {
+                        height: 25px;
+
+                        display: flex;
+                        flex-direction: row;
+                        flex-wrap: nowrap;
+                        justify-content: center;
+                        align-items: center;
+
+                        background-color: #e6e6e6;
+
+                        >div:first-child {
+                            min-width: 60px;
+
+                            padding: 0 20px;
+
+                            border-right: 2px solid #555555;
+                            border-collapse: collapse;
+                        }
+
+                        >div {
+                            height: 100%;
+                        }
+
+                        .containerInformacaoListaNewLeads {
+                            width: 100%;
+
+                            margin-left: 10px;
+                        }
+                    }
+
+                    >li:first-child {
+                        background-color: #9e9e9e;
+                    }
+
+                    >li:last-child {
+                        >div {
+
+                            .containerInformacaoListaNewLeads {
+                                width: 100%;
+                            }
+                        }
+                    }
+
+                    .backgroundAlternativoListaNewLeads {
+                        background-color: #fff;
+                    }
+                }
+            }
+
+            .containerBotaoNewLeads {
+                margin-top: 20px;
+
+                width: 100%;
+                height: 60px;
+
+                background-color: #2196f3;
+
+                >button {
+                    width: 100%;
+                    height: 100%;
+
+                    border: 0;
+
+                    background: transparent;
+                    color: #fff;
+
+                    font-size: 1.2em;
+                }
+            }
+        }
+
+    }
+}
