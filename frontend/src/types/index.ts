@@ -20,8 +20,25 @@ type ArrayRowLead = {
     terceiroCampos: string
 }
 
+type ObjetoInformacaoLead = {
+    name?: string,
+    telefone?: string,
+    email?: string,
+    oportunidades?: string[]
+}
+
+type ObjetoOportunidades = {
+    [index: string]: any,
+    rpa: string;
+    produtoDigital: string,
+    analytics: string,
+    bpm: string
+}
+
 export type {
     LocalStorage,
     ValoresMessagem,
-    ArrayRowLead
+    ArrayRowLead,
+    ObjetoInformacaoLead,
+    ObjetoOportunidades
 }
