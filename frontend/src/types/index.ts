@@ -1,6 +1,6 @@
 import { CSSProperties } from "react"
 
-type LocalStorage = {
+type LocalStorageLogin = {
     login: {
         user: string,
         password: string,
@@ -40,11 +40,17 @@ type ObjetoOportunidades = {
     bpm: string
 }
 
+type RetornoAutenticacao = {
+    permissao: boolean,
+    link: string
+}
+
 export type {
-    LocalStorage,
+    LocalStorageLogin,
     ValoresMessagem,
     ArrayRowLead,
     ObjetoInformacaoLead,
     ObjetoOportunidades,
-    LocalStorageLead
+    LocalStorageLead,
+    RetornoAutenticacao
 }

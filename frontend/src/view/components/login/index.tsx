@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { criptografia, verificacaoToken } from "../../../services/criptografia";
-import { LocalStorage, ValoresMessagem } from "../../../types";
+import { criptografia, compararValoresCripotografados } from "../../../services/criptografia";
+import { LocalStorageLogin, ValoresMessagem } from "../../../types";
+import { autenticacaoLogin } from "../../../services/autenticacaoLogin"
 
 import { Mensagem } from "../mensagem";
 import { Logo } from "../logo"
@@ -204,7 +205,7 @@ function Login() {
                         password: password,
                         token: valorCripografia
                     }
-                } as LocalStorage));
+                } as LocalStorageLogin));
 
                 mensagemInterna = "Login Efetuado com sucesso!";
 
@@ -212,7 +213,7 @@ function Login() {
 
                 liberarMensagem = true;
             }
-            else if (verificacaoToken(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
+            else if (compararValoresCripotografados(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
                 mensagemInterna = "Login Efetuado com sucesso!";
 
                 liberarMensagem = true;
@@ -232,21 +233,19 @@ function Login() {
 
     useEffect(() => {
         if (usuario !== null && password !== null && confirmacaoPassword !== null) {
-            const localStorageGeralUseEffect: LocalStorage = JSON.parse(localStorage.getItem("listLeads-login") as string);
-            if (`${localStorageGeralUseEffect}` !== "") {
-                if (localStorageGeralUseEffect.login?.token !== null) {
-                    if (verificacaoToken(`${localStorageGeralUseEffect.login?.user}&${localStorageGeralUseEffect.login?.password}`, localStorageGeralUseEffect.login?.token as string)) {
-                        let mensagemInterna = "";
-                        mensagemInterna = "Bem vindo de volta!";
 
-                        setEfeitoMensagem({
-                            displayContainer: { display: "flex" },
-                            mensagem: mensagemInterna
-                        })
+            const valorAutenticacaoLogin = autenticacaoLogin();
 
-                        setEfeturarLogin(true);
-                    }
-                }
+            if (valorAutenticacaoLogin.permissao === true) {
+                let mensagemInterna = "";
+                mensagemInterna = "Bem vindo de volta!";
+
+                setEfeitoMensagem({
+                    displayContainer: { display: "flex" },
+                    mensagem: mensagemInterna
+                })
+
+                setEfeturarLogin(true);
             }
         }
     }, [password, usuario, confirmacaoPassword])
