@@ -1,7 +1,7 @@
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-import { ArrayRowLead } from "../../../types"
+import { ArrayRowLead, LocalStorageLead } from "../../../types"
 
 import "./styles.scss";
 
@@ -9,7 +9,7 @@ type ConfiguracaoRowLead = {
     setMove: (key: number, valores: ArrayRowLead) => void
     informacao: {
         key: number,
-        objeto: ArrayRowLead
+        objeto: LocalStorageLead
     }
 }
 
@@ -22,9 +22,9 @@ type ConfiguracaoEfeitoDrag = {
 function RowLead(props: ConfiguracaoRowLead) {
 
     const [valorRow, setValorRow] = useState<ArrayRowLead>({
-        primeiroCampo: props.informacao.objeto.primeiroCampo,
-        segundoCampo: props.informacao.objeto.segundoCampo,
-        terceiroCampos: props.informacao.objeto.terceiroCampos
+        primeiroCampo: props.informacao.objeto.arrayRow.primeiroCampo,
+        segundoCampo: props.informacao.objeto.arrayRow.segundoCampo,
+        terceiroCampos: props.informacao.objeto.arrayRow.terceiroCampos
     });
 
     const [tipoAtual, setTipoAtual] = useState<string>("");
@@ -118,6 +118,16 @@ function RowLead(props: ConfiguracaoRowLead) {
         setTipoAtual("");
 
     }
+
+    useEffect(() => {
+        if (valorRow.primeiroCampo === "" && valorRow.segundoCampo === "" && valorRow.terceiroCampos === "") {
+            setValorRow({
+                primeiroCampo: props.informacao.objeto.informacao.name,
+                segundoCampo: "",
+                terceiroCampos: ""
+            })
+        }
+    }, [valorRow])
 
     return (
         <>

@@ -2,46 +2,47 @@ import { useCallback, useEffect, useState } from "react";
 import { Logo } from "../../components/logo";
 
 import { RowLead } from "../../components/rowLead";
-import { ArrayRowLead } from "../../../types";
+import { ArrayRowLead, LocalStorageLead } from "../../../types";
 
 import "./styles.scss";
 
 const nomeLocalStorage = "listLeads-leads";
 
 if (localStorage.getItem(nomeLocalStorage) === null) {
-    localStorage.setItem(nomeLocalStorage, "");
+
+    localStorage.setItem(nomeLocalStorage, JSON.stringify([]));
 }
 
 function Leads() {
 
-    const [arrayRowLead, setArrayRowLead] = useState<ArrayRowLead[]>([])
+    const [localStorageLead, setLocalStorageLead] = useState<LocalStorageLead[]>([])
 
     function setMove(key: number, valores: ArrayRowLead) {
-        const arrayRetorno = arrayRowLead.map((componente, index) => {
+        const localStorageLeadInterna = localStorageLead.map((componente, index) => {
             if (index === key) {
-                componente.primeiroCampo = valores.primeiroCampo;
-                componente.segundoCampo = valores.segundoCampo;
-                componente.terceiroCampos = valores.terceiroCampos;
+                componente.arrayRow.primeiroCampo = valores.primeiroCampo;
+                componente.arrayRow.segundoCampo = valores.segundoCampo;
+                componente.arrayRow.terceiroCampos = valores.terceiroCampos;
             }
 
             return componente;
         })
 
-        setArrayRowLead(arrayRetorno)
+        setLocalStorageLead(localStorageLeadInterna)
 
-        localStorage.setItem(nomeLocalStorage, JSON.stringify(arrayRetorno));
+        localStorage.setItem(nomeLocalStorage, JSON.stringify(localStorageLeadInterna));
     }
 
     useEffect(() => {
-        if (arrayRowLead.length === 0) {
+        if (localStorageLead.length === 0) {
             if (localStorage.getItem(nomeLocalStorage) !== null) {
-                setArrayRowLead(JSON.parse(localStorage.getItem(nomeLocalStorage) as string));
+                setLocalStorageLead(JSON.parse(localStorage.getItem(nomeLocalStorage) as string));
             }
         }
-    }, [arrayRowLead])
+    }, [setLocalStorageLead])
 
     useCallback(() => {
-        setArrayRowLead(JSON.parse(localStorage.getItem(nomeLocalStorage) as string));
+        setLocalStorageLead(JSON.parse(localStorage.getItem(nomeLocalStorage) as string));
     }, [localStorage.getItem(nomeLocalStorage)])
 
     return (
@@ -72,7 +73,7 @@ function Leads() {
                                     Reunião Agendada
                                 </div>
                             </li>
-                            {arrayRowLead.map((objeto, index) => {
+                            {localStorageLead.map((objeto, index) => {
                                 return (
                                     <RowLead setMove={setMove}
                                         informacao={{
