@@ -8,6 +8,11 @@ type LocalStorage = {
     } | null
 }
 
+type LocalStorageLead = {
+    informacao: ObjetoInformacaoLead,
+    arrayRow: ArrayRowLead
+}
+
 type ValoresMessagem = {
     displayContainer: CSSProperties,
     mensagem: string,
@@ -21,10 +26,10 @@ type ArrayRowLead = {
 }
 
 type ObjetoInformacaoLead = {
-    name?: string,
-    telefone?: string,
-    email?: string,
-    oportunidades?: string[]
+    name: string,
+    telefone: string,
+    email: string,
+    oportunidades: string[]
 }
 
 type ObjetoOportunidades = {
@@ -40,5 +45,6 @@ export type {
     ValoresMessagem,
     ArrayRowLead,
     ObjetoInformacaoLead,
-    ObjetoOportunidades
+    ObjetoOportunidades,
+    LocalStorageLead
 }

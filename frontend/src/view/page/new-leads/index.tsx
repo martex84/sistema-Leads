@@ -4,16 +4,21 @@ import { CSSProperties, useState } from "react";
 import { Logo } from "../../components/logo";
 import { Mensagem } from "../../components/mensagem";
 import { ValoresMessagem } from "../../../types"
-import { ObjetoInformacaoLead, ObjetoOportunidades } from "../../../types"
+import { ObjetoInformacaoLead, ObjetoOportunidades, LocalStorageLead } from "../../../types"
 
 import "./styles.scss";
-
-
 
 type DestaqueSpan = {
     name?: string,
     telefone?: string,
     email?: string
+}
+
+const nomeLocalStorage = "listLeads-leads";
+
+if (localStorage.getItem(nomeLocalStorage) === null) {
+
+    localStorage.setItem(nomeLocalStorage, JSON.stringify([]));
 }
 
 function NewLeads() {
@@ -35,7 +40,7 @@ function NewLeads() {
         email: ""
     });
 
-    const [configuracaoMensagem, setConfiguracaoMensagem] = useState<ValoresMessagem>({
+    const [configuracaoAtualMensagem, setConfiguracaoAtualMensagem] = useState<ValoresMessagem>({
         displayContainer: { display: "none" },
         mensagem: ""
     });
@@ -44,8 +49,7 @@ function NewLeads() {
         rpa: "",
         produtoDigital: "",
         analytics: "",
-        bpm: "",
-        total: false
+        bpm: ""
     });
 
     const [rpaChecked, setRpaChecked] = useState<boolean>(false);
@@ -57,15 +61,24 @@ function NewLeads() {
 
     function salvarTelefone(valor: string) {
 
-        if (telefone.length === 0) {
-            setTelefone(`(${valor}`);
+
+        if (valor === "(") {
+            setTelefone("")
+            console.log(valor)
         }
-        else if ((telefone)?.length === 2) {
-            setTelefone(`${valor}) `);
+        else if (valor.length >= 1) {
+            if (telefone.length === 0) {
+                setTelefone(`(${valor}`);
+            }
+            else if ((telefone)?.length === 2) {
+                setTelefone(`${valor}) `);
+            }
+            else {
+                setTelefone(valor);
+            }
         }
-        else {
-            setTelefone(valor);
-        }
+
+
 
     }
 
@@ -129,7 +142,7 @@ function NewLeads() {
         }
 
         if (erroCaptado === true) {
-            mudarConfiguracaoMensagem(mensagemErro, { display: "flex" })
+            configuracaoMensagem(mensagemErro, { display: "flex" })
         }
         else {
             setDestaqueSpan({
@@ -137,18 +150,72 @@ function NewLeads() {
                 telefone: "",
                 email: ""
             })
+
+            const localStorageInterno: any[] = JSON.parse(localStorage.getItem(nomeLocalStorage) as string);
+
+            let oportunidades: string[] = [];
+
+            Object.values(checkBoxOportunidade).forEach(valores => {
+                if (valores !== "") oportunidades.push(valores);
+            })
+
+            const localStorageLead: LocalStorageLead = {
+                arrayRow: {
+                    primeiroCampo: "",
+                    segundoCampo: "",
+                    terceiroCampos: ""
+                },
+                informacao: {
+                    name: name,
+                    telefone: telefone,
+                    email: email,
+                    oportunidades: oportunidades
+                }
+            };
+
+            localStorageInterno.push(localStorageLead);
+
+            localStorage.setItem(nomeLocalStorage, JSON.stringify(localStorageInterno));
+
+            limparCampos();
+
+            configuracaoMensagem("Lead Cadastrada com sucesso, voltando para o gerênciamento!", { display: "flex" })
         }
     }
 
-    function mudarConfiguracaoMensagem(mensagem: string, display: CSSProperties) {
-        setConfiguracaoMensagem({
+    function limparCampos() {
+        setName("");
+        setEmail("");
+        setTelefone("");
+
+        limparCheckBox();
+    }
+
+    function limparCheckBox() {
+        let objetoInternaCheckBox = checkBoxOportunidade;
+
+        Object.keys(objetoInternaCheckBox).forEach((key) => {
+            if (key !== "total") {
+                objetoInternaCheckBox[key] = ""
+            }
+        })
+
+        setRpaChecked(false);
+        setProdutoDigitalChecked(false);
+        setAnalyticsChecked(false);
+        setBpmChecked(false);
+        setTotalChecked(false);
+    }
+
+    function configuracaoMensagem(mensagem: string, display: CSSProperties) {
+        setConfiguracaoAtualMensagem({
             displayContainer: display,
             mensagem: mensagem
         })
     }
 
     function closeMensagem() {
-        mudarConfiguracaoMensagem("", { display: "none" })
+        configuracaoMensagem("", { display: "none" })
     }
 
     function salvarCheckBox(opcao: string) {
@@ -201,17 +268,7 @@ function NewLeads() {
                     objetoInternaCheckBox.bpm = "BPM";
                 }
                 else {
-                    Object.keys(objetoInternaCheckBox).forEach((key) => {
-                        if (key !== "total") {
-                            objetoInternaCheckBox[key] = ""
-                        }
-                    })
-
-                    setRpaChecked(false);
-                    setProdutoDigitalChecked(false);
-                    setAnalyticsChecked(false);
-                    setBpmChecked(false);
-                    setTotalChecked(false);
+                    limparCheckBox();
                 }
             }
         }
@@ -263,7 +320,11 @@ function NewLeads() {
                                 <ul className="listaOportunidadesNewLeads">
                                     <li>
                                         <div>
-                                            <input type="checkbox" onChange={() => { salvarCheckBox("total") }} />
+                                            <input
+                                                type="checkbox"
+                                                onChange={() => { salvarCheckBox("total") }}
+                                                checked={totalChecked}
+                                            />
                                         </div>
                                         <div className="containerInformacaoListaNewLeads"></div>
                                     </li>
@@ -332,7 +393,7 @@ function NewLeads() {
                         </div>
                     </div>
                 </div>
-                <Mensagem displayContainer={configuracaoMensagem.displayContainer} mensagem={configuracaoMensagem.mensagem} setDisplay={closeMensagem} />
+                <Mensagem displayContainer={configuracaoAtualMensagem.displayContainer} mensagem={configuracaoAtualMensagem.mensagem} setDisplay={closeMensagem} />
             </div>
         </>
     );
