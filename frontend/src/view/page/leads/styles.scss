@@ -17,7 +17,7 @@
 
     >div {
         width: 800px;
-        height: 600px;
+        min-height: 600px;
         padding: 10px 40px;
 
         display: flex;
@@ -69,6 +69,8 @@
 
             margin: 40px 0px 10px;
 
+            cursor: pointer;
+
             button {
                 width: 100%;
                 height: 100%;
@@ -76,6 +78,12 @@
                 border: 0;
 
                 background-color: #2196f3;
+
+                a {
+                    text-decoration: none;
+
+                    color: #fff;
+                }
             }
         }
 

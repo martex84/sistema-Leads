@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from "react";
 import { Logo } from "../../components/logo";
+import { Link } from "react-router-dom";
 
 import { RowLead } from "../../components/rowLead";
 import { ArrayRowLead, LocalStorageLead } from "../../../types";
@@ -57,7 +58,9 @@ function Leads() {
                     </div>
                     <div className="containerButtonNewLeads">
                         <button>
-                            Novo Lead (+)
+                            <Link to="/leads/new">
+                                Novo Lead (+)
+                            </Link>
                         </button>
                     </div>
                     <div className="containerConteudoLeads">
