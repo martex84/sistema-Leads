@@ -19,6 +19,19 @@ type ValoresCssIput = {
     confirmacao?: string
 }
 
+const nomeLocalStorageLogin = "listLeads-login";
+
+const nomeLocalStorageLeads = "listLeads-leads";
+
+if (localStorage.getItem(nomeLocalStorageLeads) === null) {
+
+    localStorage.setItem(nomeLocalStorageLeads, JSON.stringify([]));
+}
+
+if (localStorage.getItem(nomeLocalStorageLogin) === null) {
+    localStorage.setItem(nomeLocalStorageLogin, JSON.stringify(""));
+}
+
 function Login() {
     const [usuario, setUsuario] = useState<string>("");
     const [password, setPassword] = useState<string>("");
@@ -34,7 +47,7 @@ function Login() {
         mensagem: ""
     })
 
-    const localStorageGeral: LocalStorage = JSON.parse(localStorage.getItem("listLeads-login") as string);
+    const localStorageGeral = JSON.parse(localStorage.getItem(nomeLocalStorageLogin) as string);
 
     function verificaPassword() {
         let senhaCorreta = false;
@@ -168,7 +181,7 @@ function Login() {
 
     function acaoBotaoMensagem() {
         if (efeturarLogin === true) {
-            window.location.href = "http://localhost:3000/leads"
+            window.location.href = `${window.location.href}leads`
         }
 
         setEfeitoMensagem({
@@ -184,7 +197,7 @@ function Login() {
         if (usuario !== "" && password !== "" && confirmacaoPassword !== "") {
             const valorCripografia: string = criptografia(`${usuario}&${password}`);
 
-            if (localStorageGeral === null) {
+            if (`${localStorageGeral}` === "") {
                 localStorage.setItem("listLeads-login", JSON.stringify({
                     login: {
                         user: usuario,
@@ -220,7 +233,7 @@ function Login() {
     useEffect(() => {
         if (usuario !== null && password !== null && confirmacaoPassword !== null) {
             const localStorageGeralUseEffect: LocalStorage = JSON.parse(localStorage.getItem("listLeads-login") as string);
-            if (localStorageGeralUseEffect !== null) {
+            if (`${localStorageGeralUseEffect}` !== "") {
                 if (localStorageGeralUseEffect.login?.token !== null) {
                     if (verificacaoToken(`${localStorageGeralUseEffect.login?.user}&${localStorageGeralUseEffect.login?.password}`, localStorageGeralUseEffect.login?.token as string)) {
                         let mensagemInterna = "";
