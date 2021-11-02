@@ -57,6 +57,7 @@ function NewLeads() {
     const [analyticsChecked, setAnalyticsChecked] = useState<boolean>(false);
     const [bpmChecked, setBpmChecked] = useState<boolean>(false);
     const [totalChecked, setTotalChecked] = useState<boolean>(false);
+    const [salvarMensagem, setSalvarMensagem] = useState<boolean>(false);
 
 
     function salvarTelefone(valor: string) {
@@ -180,6 +181,8 @@ function NewLeads() {
             limparCampos();
 
             configuracaoMensagem("Lead Cadastrada com sucesso, voltando para o gerênciamento!", { display: "flex" })
+
+            setSalvarMensagem(true);
         }
     }
 
@@ -216,6 +219,12 @@ function NewLeads() {
 
     function closeMensagem() {
         configuracaoMensagem("", { display: "none" })
+
+        if (salvarMensagem === true) {
+            setSalvarMensagem(false);
+
+            window.location.href = "http://localhost:3000/leads";
+        }
     }
 
     function salvarCheckBox(opcao: string) {
