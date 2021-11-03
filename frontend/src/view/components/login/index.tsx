@@ -120,7 +120,7 @@ function Login() {
         if (usuario === "") {
             setEfeitoFaltaInformacao({ usuario: "destaqueSpan" })
 
-            mensagemInterna = "Usuario Vazio!";
+            mensagemInterna = "Usuario vazio!";
 
             erroInterno = true;
 
@@ -129,7 +129,14 @@ function Login() {
         else if (password === "") {
             setEfeitoFaltaInformacao({ password: "destaqueSpan" })
 
-            mensagemInterna = "Password Vazio!";
+            mensagemInterna = "Password vazio!";
+
+            erroInterno = true;
+
+            setEfeturarLogin(false);
+        }
+        else if (verificaPassword() === false && erroInterno === false) {
+            mensagemInterna = "Password incorreto, utilize caracteres, números e símbolos ou valor maior que 8 caracteres!";
 
             erroInterno = true;
 
@@ -138,28 +145,21 @@ function Login() {
         else if (confirmacaoPassword === "") {
             setEfeitoFaltaInformacao({ confirmacao: "destaqueSpan" })
 
-            mensagemInterna = "Confirmação de Password Vazio!";
+            mensagemInterna = "Confirmação de password vazio!";
+
+            erroInterno = true;
+
+            setEfeturarLogin(false);
+        }
+        else if (password !== confirmacaoPassword && erroInterno === false) {
+            mensagemInterna = "Confirmação de password diferente do password";
 
             erroInterno = true;
 
             setEfeturarLogin(false);
         }
 
-        if (verificaPassword() === false && erroInterno === false) {
-            mensagemInterna = "Password Incorreto, utilize caracteres, números e simbolos!";
 
-            erroInterno = true;
-
-            setEfeturarLogin(false);
-        }
-
-        if (password !== confirmacaoPassword && erroInterno === false) {
-            mensagemInterna = "Confirmação de Password diferente do Password";
-
-            erroInterno = true;
-
-            setEfeturarLogin(false);
-        }
 
         if (erroInterno === false) {
             verificaToken();
@@ -186,6 +186,9 @@ function Login() {
     function verificaToken() {
         let mensagemInterna = "";
         let liberarMensagem = false;
+        const diaAtual = new Date;
+
+        console.log(diaAtual.getUTCDay);
 
         if (usuario !== "" && password !== "" && confirmacaoPassword !== "") {
             const valorCripografia: string = criptografia(`${usuario}&${password}`);
@@ -199,14 +202,14 @@ function Login() {
                     }
                 } as LocalStorageLogin));
 
-                mensagemInterna = "Login Efetuado com sucesso!";
+                mensagemInterna = "Login efetuado com sucesso!";
 
                 setEfeturarLogin(true);
 
                 liberarMensagem = true;
             }
             else if (verificarToken(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
-                mensagemInterna = "Login Efetuado com sucesso!";
+                mensagemInterna = "Login efetuado com sucesso!";
 
                 liberarMensagem = true;
 
