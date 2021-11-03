@@ -1,12 +1,14 @@
 
-import { useState } from "react";
+import { CSSProperties, useState } from "react";
 
 import { ArrayRowLead, LocalStorageLead } from "../../../types"
+import { Mensagem } from "../mensagem";
 
 import "./styles.scss";
 
 type ConfiguracaoRowLead = {
-    setMove: (key: number, valores: ArrayRowLead) => void
+    setMove: (key: number, valores: ArrayRowLead) => void,
+    mostrarMensagem: (key: number) => void,
     informacao: {
         key: number,
         objeto: LocalStorageLead
@@ -149,6 +151,8 @@ function RowLead(props: ConfiguracaoRowLead) {
 
     }
 
+
+
     return (
         <>
             <li className="containerDadosRowLead">
@@ -156,6 +160,7 @@ function RowLead(props: ConfiguracaoRowLead) {
                     <span
                         className={objetoEfeitoDrag.primeiroCampo}
                         onDragStart={(event) => salvarValorAtualFuturo("1", event)}
+                        onDoubleClick={() => props.mostrarMensagem(props.informacao.key)}
                         draggable="true">
                         {`${valorRow.primeiroCampo}${valorTextoEfeito.primeiroCampo}`}
                     </span>
@@ -165,6 +170,7 @@ function RowLead(props: ConfiguracaoRowLead) {
                         className={objetoEfeitoDrag.segundoCampo}
                         onDragStart={(event) => salvarValorAtualFuturo("2", event)}
                         onMouseEnter={(event) => salvarValorAtualFuturo("2", event)}
+
                         draggable="true">
                         {`${valorRow.segundoCampo}${valorTextoEfeito.segundoCampo}`}
                     </span>
@@ -173,6 +179,7 @@ function RowLead(props: ConfiguracaoRowLead) {
                     <span
                         className={objetoEfeitoDrag.terceiroCapo}
                         onMouseEnter={(event) => salvarValorAtualFuturo("3", event)}
+
                         draggable="true">
                         {`${valorRow.terceiroCampos}${valorTextoEfeito.terceiroCapo}`}
                     </span>

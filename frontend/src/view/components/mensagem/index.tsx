@@ -13,7 +13,7 @@ function Mensagem(props: ValoresMessagem) {
             <div className={`containerMensagem`} style={props.displayContainer}>
                 <div className="containerInternoMensagem">
                     <div className="mensagem">
-                        {props.mensagem}
+                        {props.mensagem === undefined ? props.children : props.mensagem}
                     </div>
                     <button onClick={() => {
                         return props.setDisplay !== undefined ? props.setDisplay() : null

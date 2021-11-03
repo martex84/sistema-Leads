@@ -6,7 +6,7 @@
 
 //criar variavel para cor tabela
 
-.containerLeads {
+.containerExternoLeads {
     width: 100%;
     height: 100vh;
 
@@ -15,7 +15,7 @@
 
     position: relative;
 
-    >div {
+    .containerInternoLeads {
         width: 800px;
         min-height: 600px;
         padding: 10px 40px;

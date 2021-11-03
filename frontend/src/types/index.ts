@@ -1,4 +1,4 @@
-import { CSSProperties } from "react"
+import React, { CSSProperties } from "react"
 
 type LocalStorageLogin = {
     login: {
@@ -9,14 +9,16 @@ type LocalStorageLogin = {
 }
 
 type LocalStorageLead = {
+    [index: string]: any,
     informacao: ObjetoInformacaoLead,
     arrayRow: ArrayRowLead
 }
 
 type ValoresMessagem = {
     displayContainer: CSSProperties,
-    mensagem: string,
+    mensagem?: string,
     setDisplay?: () => void | null
+    children?: React.ReactNode
 }
 
 type ArrayRowLead = {

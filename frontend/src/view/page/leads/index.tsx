@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import React, { CSSProperties, ReactNode, useCallback, useEffect, useState } from "react";
 import { Logo } from "../../components/logo";
 import { Link } from "react-router-dom";
 
@@ -8,10 +8,22 @@ import { criacaoLocalStorage } from "../../../services/criacaoLocalStorage";
 import { autenticacaoLogin } from "../../../services/autenticacaoLogin";
 
 import "./styles.scss";
+import { Mensagem } from "../../components/mensagem";
 
 const nomeLocalStorage: RetornoLocalStorage = criacaoLocalStorage();
 
+type ObjetoMensagem = {
+    name: string,
+    email: string,
+    telefone: string,
+    tipo: string
+}
+
 function Leads() {
+
+    const [childrenMensagem, setChildrenMesagem] = useState<ReactNode>((<></>));
+
+    const [displayMessage, setDisplayMessage] = useState<CSSProperties>({ display: "none" });
 
     const localStorageInterna = JSON.parse(localStorage.getItem(nomeLocalStorage.leads) as string);
 
@@ -31,6 +43,71 @@ function Leads() {
         setLocalStorageLead(localStorageLeadInterna)
 
         localStorage.setItem(nomeLocalStorage.leads, JSON.stringify(localStorageLeadInterna));
+    }
+
+    function mostrarMensagem(key: number) {
+
+        const objetoInterno: ObjetoMensagem = {
+            name: "",
+            email: "",
+            telefone: "",
+            tipo: ""
+        }
+
+        for (let index in localStorageLead) {
+            const indexInterno: number = parseInt(index);
+
+            if (indexInterno === key) {
+                const { email, telefone, name, oportunidades } = localStorageLead[key].informacao;
+
+                objetoInterno.name = name;
+                objetoInterno.email = email;
+                objetoInterno.telefone = telefone;
+
+                let oportunidadesString: string = "";
+
+                for (let oportunidade of oportunidades) {
+                    if (oportunidade !== "") {
+                        if (oportunidadesString.length === 0) {
+                            oportunidadesString = oportunidadesString + oportunidade;
+                        }
+                        else {
+                            oportunidadesString = oportunidadesString + " - " + oportunidade;
+                        }
+                    }
+                }
+
+                objetoInterno.tipo = oportunidadesString;
+            }
+        }
+
+        setDisplayMessage({ display: "flex" })
+
+        setChildrenMesagem(<div className="mensagemDetalhada">
+            <div> Informação Detalhada </div>
+            <div>
+                <p>
+                    <span>Nome:</span>
+                    {objetoInterno.name}
+                </p>
+                <p>
+                    <span>Email:</span>
+                    {objetoInterno.email}
+                </p>
+                <p>
+                    <span>Telefone:</span>
+                    {objetoInterno.telefone}
+                </p>
+                <p>
+                    <span>Tipo:</span>
+                    {objetoInterno.tipo}
+                </p>
+            </div>
+        </div>)
+    }
+
+    function closeMensagem() {
+        setDisplayMessage({ display: "none" })
     }
 
     useEffect(() => {
@@ -59,8 +136,8 @@ function Leads() {
 
     return (
         <>
-            <div className="containerLeads">
-                <div>
+            <div className="containerExternoLeads">
+                <div className="containerInternoLeads">
                     <div className="containerHeaderLeads">
                         <Logo />
                         <div className="detalhePainelLeads">
@@ -94,6 +171,7 @@ function Leads() {
                                             objeto: objeto,
                                             key: index
                                         }}
+                                        mostrarMensagem={mostrarMensagem}
                                         key={index}
                                     />
                                 );
@@ -101,6 +179,11 @@ function Leads() {
                         </ul>
                     </div>
                 </div>
+                <Mensagem
+                    displayContainer={displayMessage}
+                    children={childrenMensagem}
+                    setDisplay={closeMensagem}
+                />
             </div>
         </>
     );
