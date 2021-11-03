@@ -3,9 +3,10 @@ import { Logo } from "../../components/logo";
 import { Link } from "react-router-dom";
 
 import { RowLead } from "../../components/rowLead";
-import { ArrayRowLead, LocalStorageLead } from "../../../types";
+import { ArrayRowLead, LocalStorageLead, RetornoAutenticacao } from "../../../types";
 
 import "./styles.scss";
+import { autenticacaoLogin } from "../../../services/autenticacaoLogin";
 
 const nomeLocalStorage = "listLeads-leads";
 
@@ -43,6 +44,17 @@ function Leads() {
             }
         }
     }, [setLocalStorageLead, localStorageInterna, localStorageLead])
+
+    useEffect(() => {
+        if (localStorage.getItem(nomeLocalStorage) !== null) {
+            const autenticacaoLoginInterno: RetornoAutenticacao = autenticacaoLogin();
+
+            if (autenticacaoLoginInterno.permissao === false) {
+                window.location.href = autenticacaoLoginInterno.link
+            }
+
+        }
+    }, [])
 
     useCallback(() => {
         setLocalStorageLead(localStorageInterna);

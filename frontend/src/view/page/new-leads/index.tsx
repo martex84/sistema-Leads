@@ -1,12 +1,12 @@
 
-import { CSSProperties, useState } from "react";
+import { CSSProperties, useEffect, useState } from "react";
 
 import { Logo } from "../../components/logo";
 import { Mensagem } from "../../components/mensagem";
-import { ValoresMessagem } from "../../../types"
-import { ObjetoOportunidades, LocalStorageLead } from "../../../types"
+import { ObjetoOportunidades, LocalStorageLead, ValoresMessagem, RetornoAutenticacao } from "../../../types"
 
 import "./styles.scss";
+import { autenticacaoLogin } from "../../../services/autenticacaoLogin";
 
 type DestaqueSpan = {
     name?: string,
@@ -278,6 +278,17 @@ function NewLeads() {
         setCheckboxOportunidade(objetoInternaCheckBox);
 
     }
+
+    useEffect(() => {
+        if (localStorage.getItem(nomeLocalStorage) !== null) {
+            const autenticacaoLoginInterno: RetornoAutenticacao = autenticacaoLogin();
+
+            if (autenticacaoLoginInterno.permissao === false) {
+                window.location.href = autenticacaoLoginInterno.link
+            }
+
+        }
+    }, [])
 
     return (
         <>
