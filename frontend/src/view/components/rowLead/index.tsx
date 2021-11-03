@@ -35,6 +35,12 @@ function RowLead(props: ConfiguracaoRowLead) {
         terceiroCapo: ""
     });
 
+    const [valorTextoEfeito, setValorTextoEfeito] = useState<ConfiguracaoEfeitoDrag>({
+        primeiroCampo: "",
+        segundoCampo: "",
+        terceiroCapo: ""
+    })
+
     function salvarValorAtualFuturo(valor: string, event: any) {
 
         const tamanhoComponenteAtual = (event.target.innerText as string).length;
@@ -51,6 +57,12 @@ function RowLead(props: ConfiguracaoRowLead) {
                     objetoInternoEfeitoDrag.primeiroCampo = "selecaoDadosRowLead";
                     objetoInternoEfeitoDrag.segundoCampo = "destinoDadosRowLead";
 
+                    setValorTextoEfeito({
+                        primeiroCampo: "",
+                        segundoCampo: "Araste Aqui!",
+                        terceiroCapo: ""
+                    })
+
                     setObjetoEfeitoDrag(objetoInternoEfeitoDrag);
 
                     return;
@@ -65,6 +77,12 @@ function RowLead(props: ConfiguracaoRowLead) {
                         terceiroCampos: ""
                     }
 
+                    setValorTextoEfeito({
+                        primeiroCampo: "",
+                        segundoCampo: "",
+                        terceiroCapo: ""
+                    })
+
                     salvarValorLocalStorage(arrayValores);
 
                     objetoInternoEfeitoDrag.primeiroCampo = "";
@@ -76,6 +94,12 @@ function RowLead(props: ConfiguracaoRowLead) {
                 }
                 else if (tipoAtual === "" && event.type === "dragstart" && tamanhoComponenteAtual !== 0) {
                     setTipoAtual("2");
+
+                    setValorTextoEfeito({
+                        primeiroCampo: "",
+                        segundoCampo: "",
+                        terceiroCapo: "Araste Aqui!"
+                    })
 
                     objetoInternoEfeitoDrag.segundoCampo = "selecaoDadosRowLead";
                     objetoInternoEfeitoDrag.terceiroCapo = "destinoDadosRowLead";
@@ -93,6 +117,12 @@ function RowLead(props: ConfiguracaoRowLead) {
                         segundoCampo: "",
                         terceiroCampos: valorRow.segundoCampo
                     }
+
+                    setValorTextoEfeito({
+                        primeiroCampo: "",
+                        segundoCampo: "",
+                        terceiroCapo: ""
+                    })
 
                     salvarValorLocalStorage(arrayValores);
 
@@ -122,24 +152,30 @@ function RowLead(props: ConfiguracaoRowLead) {
     return (
         <>
             <li className="containerDadosRowLead">
-                <div
-                    className={objetoEfeitoDrag.primeiroCampo}
-                    onDragStart={(event) => salvarValorAtualFuturo("1", event)}
-                    draggable="true">
-                    {valorRow.primeiroCampo}
+                <div>
+                    <span
+                        className={objetoEfeitoDrag.primeiroCampo}
+                        onDragStart={(event) => salvarValorAtualFuturo("1", event)}
+                        draggable="true">
+                        {`${valorRow.primeiroCampo}${valorTextoEfeito.primeiroCampo}`}
+                    </span>
                 </div>
-                <div
-                    className={objetoEfeitoDrag.segundoCampo}
-                    onDragStart={(event) => salvarValorAtualFuturo("2", event)}
-                    onMouseEnter={(event) => salvarValorAtualFuturo("2", event)}
-                    draggable="true">
-                    {valorRow.segundoCampo}
+                <div>
+                    <span
+                        className={objetoEfeitoDrag.segundoCampo}
+                        onDragStart={(event) => salvarValorAtualFuturo("2", event)}
+                        onMouseEnter={(event) => salvarValorAtualFuturo("2", event)}
+                        draggable="true">
+                        {`${valorRow.segundoCampo}${valorTextoEfeito.segundoCampo}`}
+                    </span>
                 </div>
-                <div
-                    className={objetoEfeitoDrag.terceiroCapo}
-                    onMouseEnter={(event) => salvarValorAtualFuturo("3", event)}
-                    draggable="true">
-                    {valorRow.terceiroCampos}
+                <div>
+                    <span
+                        className={objetoEfeitoDrag.terceiroCapo}
+                        onMouseEnter={(event) => salvarValorAtualFuturo("3", event)}
+                        draggable="true">
+                        {`${valorRow.terceiroCampos}${valorTextoEfeito.terceiroCapo}`}
+                    </span>
                 </div>
             </li>
         </>
