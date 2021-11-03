@@ -5,7 +5,7 @@ type LocalStorageLogin = {
         user: string,
         password: string,
         token: string
-    } | null
+    }
 }
 
 type LocalStorageLead = {

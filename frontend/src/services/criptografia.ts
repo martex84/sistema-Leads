@@ -16,7 +16,7 @@ function descripografia(valor: string) {
     return valorRetorno;
 }
 
-function compararValoresCripotografados(valorOriginal: string, valorDescripografia: string) {
+function verificarToken(valorOriginal: string, valorDescripografia: string) {
     let valorRetorno: boolean = false;
 
     const valorVerificacao: string = descripografia(valorDescripografia);
@@ -30,5 +30,6 @@ function compararValoresCripotografados(valorOriginal: string, valorDescripograf
 
 export {
     criptografia,
-    compararValoresCripotografados
+    descripografia,
+    verificarToken
 };

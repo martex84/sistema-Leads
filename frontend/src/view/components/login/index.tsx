@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { criptografia, compararValoresCripotografados } from "../../../services/criptografia";
+import { criptografia, verificarToken } from "../../../services/criptografia";
 import { LocalStorageLogin, ValoresMessagem } from "../../../types";
 import { autenticacaoLogin } from "../../../services/autenticacaoLogin"
 
@@ -202,7 +202,7 @@ function Login() {
                 localStorage.setItem("listLeads-login", JSON.stringify({
                     login: {
                         user: usuario,
-                        password: password,
+                        password: criptografia(`${password}`),
                         token: valorCripografia
                     }
                 } as LocalStorageLogin));
@@ -213,7 +213,7 @@ function Login() {
 
                 liberarMensagem = true;
             }
-            else if (compararValoresCripotografados(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
+            else if (verificarToken(`${usuario}&${password}`, localStorageGeral.login?.token as string)) {
                 mensagemInterna = "Login Efetuado com sucesso!";
 
                 liberarMensagem = true;
@@ -232,13 +232,16 @@ function Login() {
     }
 
     useEffect(() => {
-        if (usuario !== null && password !== null && confirmacaoPassword !== null) {
+        if (usuario !== null && password !== null) {
 
             const valorAutenticacaoLogin = autenticacaoLogin();
 
-            if (valorAutenticacaoLogin.permissao === true) {
+            if (valorAutenticacaoLogin.permissao === true && localStorage.getItem(nomeLocalStorageLogin) !== "") {
                 let mensagemInterna = "";
-                mensagemInterna = "Bem vindo de volta!";
+
+                const localStorageInterno: LocalStorageLogin = JSON.parse(localStorage.getItem(nomeLocalStorageLogin) as string)
+
+                mensagemInterna = `Bem vindo de volta ${localStorageInterno.login?.user}!`;
 
                 setEfeitoMensagem({
                     displayContainer: { display: "flex" },

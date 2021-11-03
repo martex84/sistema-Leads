@@ -1,5 +1,5 @@
 
-import { compararValoresCripotografados } from "./criptografia";
+import { descripografia, verificarToken } from "./criptografia";
 import { LocalStorageLogin, RetornoAutenticacao } from "../types"
 
 function autenticacaoLogin() {
@@ -12,7 +12,9 @@ function autenticacaoLogin() {
 
     if (`${localStorageGeralUseEffect}` !== "") {
         if (localStorageGeralUseEffect.login?.token !== null) {
-            if (compararValoresCripotografados(`${localStorageGeralUseEffect.login?.user}&${localStorageGeralUseEffect.login?.password}`, localStorageGeralUseEffect.login?.token as string)) {
+            const senhaDescriptografada = descripografia(localStorageGeralUseEffect.login?.password as string);
+
+            if (verificarToken(`${localStorageGeralUseEffect.login?.user}&${senhaDescriptografada}`, localStorageGeralUseEffect.login?.token as string)) {
                 retornoAtenticacao.permissao = true
             }
         }
