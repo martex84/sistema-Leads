@@ -10,7 +10,7 @@ function autenticacaoLogin() {
         link: `${window.location.href.split(":3000/")[0]}:3000/`
     }
 
-    if (`${localStorageGeralUseEffect}` !== "") {
+    if (`${localStorageGeralUseEffect}` !== "" && `${localStorageGeralUseEffect}` !== "Erro-Login") {
         if (localStorageGeralUseEffect.login?.token !== null) {
             const senhaDescriptografada = descripografia(localStorageGeralUseEffect.login?.password as string);
 

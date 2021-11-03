@@ -3,21 +3,17 @@ import { Logo } from "../../components/logo";
 import { Link } from "react-router-dom";
 
 import { RowLead } from "../../components/rowLead";
-import { ArrayRowLead, LocalStorageLead, RetornoAutenticacao } from "../../../types";
-
-import "./styles.scss";
+import { ArrayRowLead, LocalStorageLead, RetornoAutenticacao, RetornoLocalStorage } from "../../../types";
+import { criacaoLocalStorage } from "../../../services/criacaoLocalStorage";
 import { autenticacaoLogin } from "../../../services/autenticacaoLogin";
 
-const nomeLocalStorage = "listLeads-leads";
+import "./styles.scss";
 
-if (localStorage.getItem(nomeLocalStorage) === null) {
-
-    localStorage.setItem(nomeLocalStorage, JSON.stringify([]));
-}
+const nomeLocalStorage: RetornoLocalStorage = criacaoLocalStorage();
 
 function Leads() {
 
-    const localStorageInterna = JSON.parse(localStorage.getItem(nomeLocalStorage) as string);
+    const localStorageInterna = JSON.parse(localStorage.getItem(nomeLocalStorage.leads) as string);
 
     const [localStorageLead, setLocalStorageLead] = useState<LocalStorageLead[]>([])
 
@@ -34,22 +30,23 @@ function Leads() {
 
         setLocalStorageLead(localStorageLeadInterna)
 
-        localStorage.setItem(nomeLocalStorage, JSON.stringify(localStorageLeadInterna));
+        localStorage.setItem(nomeLocalStorage.leads, JSON.stringify(localStorageLeadInterna));
     }
 
     useEffect(() => {
         if (localStorageLead.length === 0) {
-            if (localStorage.getItem(nomeLocalStorage) !== null) {
+            if (localStorage.getItem(nomeLocalStorage.leads) !== null) {
                 setLocalStorageLead(localStorageInterna);
             }
         }
     }, [setLocalStorageLead, localStorageInterna, localStorageLead])
 
     useEffect(() => {
-        if (localStorage.getItem(nomeLocalStorage) !== null) {
+        if (localStorage.getItem(nomeLocalStorage.login) !== null) {
             const autenticacaoLoginInterno: RetornoAutenticacao = autenticacaoLogin();
 
             if (autenticacaoLoginInterno.permissao === false) {
+                localStorage.setItem(nomeLocalStorage.login, JSON.stringify("Erro-Login"));
                 window.location.href = autenticacaoLoginInterno.link
             }
 

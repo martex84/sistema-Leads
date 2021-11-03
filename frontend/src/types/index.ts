@@ -45,6 +45,11 @@ type RetornoAutenticacao = {
     link: string
 }
 
+type RetornoLocalStorage = {
+    login: string,
+    leads: string
+}
+
 export type {
     LocalStorageLogin,
     ValoresMessagem,
@@ -52,5 +57,6 @@ export type {
     ObjetoInformacaoLead,
     ObjetoOportunidades,
     LocalStorageLead,
-    RetornoAutenticacao
+    RetornoAutenticacao,
+    RetornoLocalStorage
 }

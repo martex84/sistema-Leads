@@ -1,12 +1,14 @@
 import { useEffect, useState } from "react";
-import { criptografia, verificarToken } from "../../../services/criptografia";
-import { LocalStorageLogin, ValoresMessagem } from "../../../types";
-import { autenticacaoLogin } from "../../../services/autenticacaoLogin"
 
+import { criptografia, verificarToken } from "../../../services/criptografia";
+import { LocalStorageLogin, ValoresMessagem, RetornoLocalStorage } from "../../../types";
+import { autenticacaoLogin } from "../../../services/autenticacaoLogin"
+import { criacaoLocalStorage } from "../../../services/criacaoLocalStorage";
 import { Mensagem } from "../mensagem";
 import { Logo } from "../logo"
 
 import "./styles.scss";
+
 
 type ValoresRetorno = {
     alfabeto: number,
@@ -20,18 +22,8 @@ type ValoresCssIput = {
     confirmacao?: string
 }
 
-const nomeLocalStorageLogin = "listLeads-login";
+const nomeLocalStorage: RetornoLocalStorage = criacaoLocalStorage();
 
-const nomeLocalStorageLeads = "listLeads-leads";
-
-if (localStorage.getItem(nomeLocalStorageLeads) === null) {
-
-    localStorage.setItem(nomeLocalStorageLeads, JSON.stringify([]));
-}
-
-if (localStorage.getItem(nomeLocalStorageLogin) === null) {
-    localStorage.setItem(nomeLocalStorageLogin, JSON.stringify(""));
-}
 
 function Login() {
     const [usuario, setUsuario] = useState<string>("");
@@ -48,7 +40,7 @@ function Login() {
         mensagem: ""
     })
 
-    const localStorageGeral = JSON.parse(localStorage.getItem(nomeLocalStorageLogin) as string);
+    const localStorageGeral = JSON.parse(localStorage.getItem(nomeLocalStorage.login) as string);
 
     function verificaPassword() {
         let senhaCorreta = false;
@@ -234,21 +226,31 @@ function Login() {
     useEffect(() => {
         if (usuario !== null && password !== null) {
 
-            const valorAutenticacaoLogin = autenticacaoLogin();
-
-            if (valorAutenticacaoLogin.permissao === true && localStorage.getItem(nomeLocalStorageLogin) !== "") {
-                let mensagemInterna = "";
-
-                const localStorageInterno: LocalStorageLogin = JSON.parse(localStorage.getItem(nomeLocalStorageLogin) as string)
-
-                mensagemInterna = `Bem vindo de volta ${localStorageInterno.login?.user}!`;
-
+            if (JSON.parse(localStorage.getItem(nomeLocalStorage.login) as string) === "Erro-Login") {
                 setEfeitoMensagem({
                     displayContainer: { display: "flex" },
-                    mensagem: mensagemInterna
+                    mensagem: "Falha na autenticação, favor realizar login"
                 })
 
-                setEfeturarLogin(true);
+                localStorage.setItem(nomeLocalStorage.login, JSON.stringify(""))
+            }
+            else {
+                const valorAutenticacaoLogin = autenticacaoLogin();
+
+                if (valorAutenticacaoLogin.permissao === true && localStorage.getItem(nomeLocalStorage.login) !== "") {
+                    let mensagemInterna = "";
+
+                    const localStorageInterno: LocalStorageLogin = JSON.parse(localStorage.getItem(nomeLocalStorage.login) as string)
+
+                    mensagemInterna = `Bem vindo de volta ${localStorageInterno.login?.user}!`;
+
+                    setEfeitoMensagem({
+                        displayContainer: { display: "flex" },
+                        mensagem: mensagemInterna
+                    })
+
+                    setEfeturarLogin(true);
+                }
             }
         }
     }, [password, usuario, confirmacaoPassword])
