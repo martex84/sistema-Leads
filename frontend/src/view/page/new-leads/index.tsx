@@ -267,7 +267,7 @@ function NewLeads() {
         if (salvarMensagem === true) {
             setSalvarMensagem(false);
 
-            window.location.href = "http://localhost:3000/leads";
+            window.location.href = `${window.location.href.split("new")[0]}`
         }
     }
 
