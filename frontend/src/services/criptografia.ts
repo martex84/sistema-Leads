@@ -1,9 +1,12 @@
 import { AES, enc } from "crypto-js"
 
+const data = new Date();
+const dataAtual = `${data.getUTCDay()}${data.getUTCMonth()}${data.getUTCFullYear()}`;
+
 function criptografia(valor: string) {
     let valorRetorno: any = "";
 
-    valorRetorno = AES.encrypt(valor, '5d17469f766d3056e50092e62250a0d0a460c167').toString();
+    valorRetorno = AES.encrypt(`${valor}&${dataAtual}`, '5d17469f766d3056e50092e62250a0d0a460c167').toString();
 
     return valorRetorno;
 }
@@ -21,7 +24,7 @@ function verificarToken(valorOriginal: string, valorDescripografia: string) {
 
     const valorVerificacao: string = descripografia(valorDescripografia);
 
-    if (valorOriginal === valorVerificacao) {
+    if (`${valorOriginal}` === valorVerificacao && valorOriginal.split("&")[2] === dataAtual) {
         valorRetorno = true;
     }
 
