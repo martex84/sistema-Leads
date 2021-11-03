@@ -50,27 +50,63 @@ function NewLeads() {
     const [bpmChecked, setBpmChecked] = useState<boolean>(false);
     const [totalChecked, setTotalChecked] = useState<boolean>(false);
     const [salvarMensagem, setSalvarMensagem] = useState<boolean>(false);
+    const [ativarTemplateTelefone, setAtivarTemplateTelefone] = useState<boolean>(false);
 
 
     function salvarTelefone(valor: string) {
 
+        let valorIterno: string = "";
 
-        if (valor === "(") {
-            setTelefone("")
+        let valorComparacao: string[] = [
+            "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "(", ")", " ",
+        ];
+
+        const tamanhoValor: number = valor.length;
+
+        for (let i = 0; i <= tamanhoValor; i++) {
+            for (let valorArray of valorComparacao) {
+
+                if (valor[i] === valorArray) {
+                    valorIterno = valorIterno + valorArray;
+                }
+            }
         }
-        else if (valor.length >= 1) {
-            if (telefone.length === 0) {
-                setTelefone(`(${valor}`);
-            }
-            else if ((telefone)?.length === 2) {
-                setTelefone(`${valor}) `);
-            }
-            else {
-                setTelefone(valor);
-            }
+
+        if (valorIterno.slice(valorIterno.length - 2, valorIterno.length) === "  ") {
+            valorIterno = valorIterno.slice(0, tamanhoValor - 1);
         }
 
+        switch (tamanhoValor) {
+            case 1:
+                if (ativarTemplateTelefone === true) {
+                    setTelefone("")
+                    setAtivarTemplateTelefone(false);
+                }
+                else {
+                    setTelefone(
+                        `(${valorIterno}`
+                    )
+                }
+                break;
 
+            case 3:
+                if (ativarTemplateTelefone === false) {
+                    setAtivarTemplateTelefone(true);
+
+                    setTelefone(
+                        `${valorIterno}) `
+                    )
+                }
+                else {
+                    setTelefone(valorIterno);
+                }
+                break;
+
+            default:
+                setTelefone(valorIterno);
+                break;
+
+        }
 
     }
 
