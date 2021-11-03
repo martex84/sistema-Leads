@@ -16,6 +16,8 @@ if (localStorage.getItem(nomeLocalStorage) === null) {
 
 function Leads() {
 
+    const localStorageInterna = JSON.parse(localStorage.getItem(nomeLocalStorage) as string);
+
     const [localStorageLead, setLocalStorageLead] = useState<LocalStorageLead[]>([])
 
     function setMove(key: number, valores: ArrayRowLead) {
@@ -37,14 +39,14 @@ function Leads() {
     useEffect(() => {
         if (localStorageLead.length === 0) {
             if (localStorage.getItem(nomeLocalStorage) !== null) {
-                setLocalStorageLead(JSON.parse(localStorage.getItem(nomeLocalStorage) as string));
+                setLocalStorageLead(localStorageInterna);
             }
         }
-    }, [setLocalStorageLead])
+    }, [setLocalStorageLead, localStorageInterna, localStorageLead])
 
     useCallback(() => {
-        setLocalStorageLead(JSON.parse(localStorage.getItem(nomeLocalStorage) as string));
-    }, [localStorage.getItem(nomeLocalStorage)])
+        setLocalStorageLead(localStorageInterna);
+    }, [localStorageInterna])
 
     return (
         <>

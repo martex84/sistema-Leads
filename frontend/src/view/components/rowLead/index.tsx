@@ -1,5 +1,5 @@
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { ArrayRowLead, LocalStorageLead } from "../../../types"
 
@@ -118,16 +118,6 @@ function RowLead(props: ConfiguracaoRowLead) {
         setTipoAtual("");
 
     }
-
-    useEffect(() => {
-        if (valorRow.primeiroCampo === "" && valorRow.segundoCampo === "" && valorRow.terceiroCampos === "") {
-            setValorRow({
-                primeiroCampo: props.informacao.objeto.informacao.name,
-                segundoCampo: "",
-                terceiroCampos: ""
-            })
-        }
-    }, [valorRow])
 
     return (
         <>

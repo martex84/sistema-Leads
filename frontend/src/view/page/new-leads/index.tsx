@@ -4,7 +4,7 @@ import { CSSProperties, useState } from "react";
 import { Logo } from "../../components/logo";
 import { Mensagem } from "../../components/mensagem";
 import { ValoresMessagem } from "../../../types"
-import { ObjetoInformacaoLead, ObjetoOportunidades, LocalStorageLead } from "../../../types"
+import { ObjetoOportunidades, LocalStorageLead } from "../../../types"
 
 import "./styles.scss";
 
@@ -22,13 +22,6 @@ if (localStorage.getItem(nomeLocalStorage) === null) {
 }
 
 function NewLeads() {
-
-    const [objetoInformacaoLead, setObjetoInformacaoLead] = useState<ObjetoInformacaoLead>({
-        name: "",
-        telefone: "",
-        email: "",
-        oportunidades: []
-    });
 
     const [name, setName] = useState<string>("");
     const [telefone, setTelefone] = useState<string>("");
@@ -162,7 +155,7 @@ function NewLeads() {
 
             const localStorageLead: LocalStorageLead = {
                 arrayRow: {
-                    primeiroCampo: "",
+                    primeiroCampo: name,
                     segundoCampo: "",
                     terceiroCampos: ""
                 },
