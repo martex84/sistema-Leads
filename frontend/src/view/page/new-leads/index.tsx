@@ -10,9 +10,11 @@ import { criacaoLocalStorage } from "../../../services/criacaoLocalStorage"
 import "./styles.scss";
 
 type DestaqueSpan = {
-    name?: string,
-    telefone?: string,
-    email?: string
+    [index: string]: any,
+    name: string,
+    telefone: string,
+    email: string,
+    oportunidades: string,
 }
 
 const nomeLocalStorage: RetornoLocalStorage = criacaoLocalStorage();
@@ -26,7 +28,8 @@ function NewLeads() {
     const [destaqueSpan, setDestaqueSpan] = useState<DestaqueSpan>({
         name: "",
         telefone: "",
-        email: ""
+        email: "",
+        oportunidades: ""
     });
 
     const [configuracaoAtualMensagem, setConfiguracaoAtualMensagem] = useState<ValoresMessagem>({
@@ -81,53 +84,69 @@ function NewLeads() {
         return simboloPresente;
     }
 
+    function mudarSpanDestaque(campoPreencher: string, valor: string) {
+        let objetoDestaqueSpanInterno: DestaqueSpan = {
+            name: "",
+            telefone: "",
+            email: "",
+            oportunidades: ""
+        };
+
+        Object.keys(objetoDestaqueSpanInterno).forEach((key: any) => {
+            if (key === campoPreencher) {
+                objetoDestaqueSpanInterno[key] = valor
+            }
+        })
+
+        setDestaqueSpan(objetoDestaqueSpanInterno);
+    }
+
     function verificarCampos() {
         let erroCaptado = false;
         let mensagemErro = "";
+        let contagemCheckbox: number = 0;
+
+        Object.values(checkBoxOportunidade).forEach(valor => {
+            if (valor !== "") {
+                contagemCheckbox++;
+            }
+        })
+
 
         if (name === "") {
             erroCaptado = true;
 
             mensagemErro = "Preencha o campo nome!"
 
-            setDestaqueSpan({
-                name: "spanDestaqueNewLeads",
-                telefone: "",
-                email: ""
-            })
+            mudarSpanDestaque("name", "spanDestaqueNewLeads")
         }
         else if (telefone === "") {
             erroCaptado = true;
 
             mensagemErro = "Preencha o campo telefone!"
 
-            setDestaqueSpan({
-                name: "",
-                telefone: "spanDestaqueNewLeads",
-                email: ""
-            })
+            mudarSpanDestaque("telefone", "spanDestaqueNewLeads")
         }
         else if (email === "") {
             erroCaptado = true;
 
             mensagemErro = "Preencha o campo email!"
 
-            setDestaqueSpan({
-                name: "",
-                telefone: "",
-                email: "spanDestaqueNewLeads"
-            })
+            mudarSpanDestaque("email", "spanDestaqueNewLeads")
         }
         else if (verificaEmail() === false) {
             erroCaptado = true;
 
             mensagemErro = "Preencha o campo email corretamente!"
 
-            setDestaqueSpan({
-                name: "",
-                telefone: "",
-                email: "spanDestaqueNewLeads"
-            })
+            mudarSpanDestaque("email", "spanDestaqueNewLeads")
+        }
+        else if (contagemCheckbox === 0) {
+            erroCaptado = true;
+
+            mensagemErro = "Escolha ao menos um tipo de oportunidade!"
+
+            mudarSpanDestaque("oportunidades", "spanDestaqueNewLeads")
         }
 
         if (erroCaptado === true) {
@@ -137,7 +156,8 @@ function NewLeads() {
             setDestaqueSpan({
                 name: "",
                 telefone: "",
-                email: ""
+                email: "",
+                oportunidades: ""
             })
 
             const localStorageInterno: any[] = JSON.parse(localStorage.getItem(nomeLocalStorage.leads) as string);
@@ -325,7 +345,7 @@ function NewLeads() {
                         </div>
                         <div className="containerAcoesNewLeads">
                             <div className="tabelaOportunidadeNewLeads">
-                                <label>Oportunidades *</label>
+                                <span className={destaqueSpan.oportunidades}>Oportunidades *</span>
                                 <ul className="listaOportunidadesNewLeads">
                                     <li>
                                         <div>

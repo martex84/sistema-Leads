@@ -79,10 +79,6 @@
                     color: #000;
                 }
 
-                .spanDestaqueNewLeads {
-                    color: #DC143C;
-                }
-
                 >input {
                     width: 250px;
                     height: 30px;
@@ -192,5 +188,9 @@
         position: absolute;
 
         background: transparent;
+    }
+
+    .spanDestaqueNewLeads {
+        color: #DC143C !important;
     }
 }
