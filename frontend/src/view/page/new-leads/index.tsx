@@ -54,7 +54,6 @@ function NewLeads() {
 
         if (valor === "(") {
             setTelefone("")
-            console.log(valor)
         }
         else if (valor.length >= 1) {
             if (telefone.length === 0) {

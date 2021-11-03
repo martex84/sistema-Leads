@@ -88,7 +88,6 @@ function Login() {
 
         }
         else {
-            console.log("Password Menor que 8 digitos")
             return senhaCorreta;
         }
     }
@@ -186,9 +185,7 @@ function Login() {
     function verificaToken() {
         let mensagemInterna = "";
         let liberarMensagem = false;
-        const diaAtual = new Date;
 
-        console.log(diaAtual.getUTCDay);
 
         if (usuario !== "" && password !== "" && confirmacaoPassword !== "") {
             const valorCripografia: string = criptografia(`${usuario}&${password}`);
