@@ -156,16 +156,17 @@ function RowLead(props: ConfiguracaoRowLead) {
     return (
         <>
             <li className="containerDadosRowLead">
-                <div>
+                <div
+                    onDoubleClick={() => props.mostrarMensagem(props.informacao.key)}>
                     <span
                         className={objetoEfeitoDrag.primeiroCampo}
                         onDragStart={(event) => salvarValorAtualFuturo("1", event)}
-                        onDoubleClick={() => props.mostrarMensagem(props.informacao.key)}
                         draggable="true">
                         {`${valorRow.primeiroCampo}${valorTextoEfeito.primeiroCampo}`}
                     </span>
                 </div>
-                <div>
+                <div
+                    onDoubleClick={() => props.mostrarMensagem(props.informacao.key)}>
                     <span
                         className={objetoEfeitoDrag.segundoCampo}
                         onDragStart={(event) => salvarValorAtualFuturo("2", event)}
@@ -175,7 +176,8 @@ function RowLead(props: ConfiguracaoRowLead) {
                         {`${valorRow.segundoCampo}${valorTextoEfeito.segundoCampo}`}
                     </span>
                 </div>
-                <div>
+                <div
+                    onDoubleClick={() => props.mostrarMensagem(props.informacao.key)}>
                     <span
                         className={objetoEfeitoDrag.terceiroCapo}
                         onMouseEnter={(event) => salvarValorAtualFuturo("3", event)}
