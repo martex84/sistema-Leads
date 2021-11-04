@@ -344,8 +344,8 @@ function NewLeads() {
 
     return (
         <>
-            <div className="containerNewLeads">
-                <div>
+            <div className="containerExternoNewLeads">
+                <div className="containerInternoNewLeads">
                     <div className="containerHeaderNewLeads">
                         <Logo />
                         <div className="detalhePainelNewLeads">
@@ -384,7 +384,7 @@ function NewLeads() {
                                 <span className={destaqueSpan.oportunidades}>Oportunidades *</span>
                                 <ul className="listaOportunidadesNewLeads">
                                     <li>
-                                        <div>
+                                        <div className="containerCheckboxListaNewLeads">
                                             <input
                                                 type="checkbox"
                                                 onChange={() => { salvarCheckBox("total") }}
@@ -394,7 +394,7 @@ function NewLeads() {
                                         <div className="containerInformacaoListaNewLeads"></div>
                                     </li>
                                     <li>
-                                        <div>
+                                        <div className="containerCheckboxListaNewLeads">
                                             <input
                                                 type="checkbox"
                                                 onChange={() => salvarCheckBox("rpa")}
@@ -407,7 +407,7 @@ function NewLeads() {
                                         </div>
                                     </li>
                                     <li className="backgroundAlternativoListaNewLeads">
-                                        <div>
+                                        <div className="containerCheckboxListaNewLeads">
                                             <input
                                                 type="checkbox"
                                                 onChange={() => salvarCheckBox("produtoDigital")}
@@ -419,7 +419,7 @@ function NewLeads() {
                                         </div>
                                     </li>
                                     <li>
-                                        <div>
+                                        <div className="containerCheckboxListaNewLeads">
                                             <input
                                                 type="checkbox"
                                                 onChange={() => salvarCheckBox("analytics")}
@@ -431,7 +431,7 @@ function NewLeads() {
                                         </div>
                                     </li>
                                     <li className="backgroundAlternativoListaNewLeads">
-                                        <div>
+                                        <div className="containerCheckboxListaNewLeads">
                                             <input
                                                 type="checkbox"
                                                 onChange={() => salvarCheckBox("bpm")}
@@ -443,7 +443,7 @@ function NewLeads() {
                                         </div>
                                     </li>
                                     <li>
-                                        <div>
+                                        <div className="containerCheckboxListaNewLeads">
                                             <span />
                                         </div>
                                         <div className="containerInformacaoListaNewLeads" />
